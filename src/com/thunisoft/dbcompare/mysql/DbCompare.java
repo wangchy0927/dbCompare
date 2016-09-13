@@ -95,7 +95,7 @@ public class DbCompare {
 			String tableName = table1.getName();
 			for(Table table2 : table2List){
 				if(table2.getName().equals(tableName)){
-					copamreCol(table1,table2);
+					compamreCol(table1,table2);
 					tmpSet1.add(table1);
 					tmpSet2.add(table2);
 				}
@@ -130,7 +130,7 @@ public class DbCompare {
 		}
 	}
 	
-	private void copamreCol(Table table1,Table table2){
+	private void compamreCol(Table table1,Table table2){
 		int columnNum1 = table1.getColumnList().size();
 		int columnNum2 = table2.getColumnList().size();
 		String tableName = table1.getName();
