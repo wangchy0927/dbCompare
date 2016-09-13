@@ -1,4 +1,4 @@
-package com.thunisoft.dbcompare;
+package com.thunisoft.dbcompare.sybase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package com.thunisoft.dbcompare;
+package com.thunisoft.dbcompare.mysql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,12 +34,11 @@ public class DbCompare {
 		DB db = new DB();
 		String dbName = help.getDBName();
 		Set<Table> tableList = getTables(help);
-		System.out.println("表个数:"+tableList.size());
 		System.out.println("Start~~~获取:"+dbName+"的表结构");
 		for(Table table : tableList){
 			Set<Column> columnList = new HashSet<Column>();
-			String tableID = table.getId()+"";
-			result = help.execQuerySQL(SQL.SYBASE_GETCOLUMNS_SQL.replace(SQL.SYBASE_TABLEID, tableID));
+			String tableName = " '"+table.getName()+"'";
+			result = help.execQuerySQL(SQL.MYSQL_GETCOLUMNS_SQL.replace(SQL.MYSQL_TABLESCHEMA, dbName).replace(SQL.MYSQL_TABLENAMA, tableName));
 			while(result.next()){
 				Column column = new Column();
 				column.setName(result.getString("COLUMN_NAME"));
@@ -51,7 +50,7 @@ public class DbCompare {
 		System.out.println("End~~~获取:"+dbName+"的表结构");
 		result.close();
 		db.setTableList(tableList);
-		//help.closedConn();
+		help.closedConn();
 		return db;
 	}
 
@@ -62,16 +61,14 @@ public class DbCompare {
 	private Set<Table> getTables(DBHelper help) throws SQLException {
 		String dbName = help.getDBName();
 		//拼接查询表的sql
-		result = help.execQuerySQL(SQL.SYBASE_GETTABLES_SQL);
+		result = help.execQuerySQL(SQL.MYSQL_GETTABLES_SQL.replace(SQL.MYSQL_TABLESCHEMA, dbName));
 		Set<Table> tableList = new HashSet<Table>();
 
 		System.out.println("Start~~~获取数据库:" + dbName + "所拥有表");
 		while (result.next()) {
 			Table table = new Table();
 			String tableName = result.getString("TABLE_NAME");
-			String tableId = result.getString("TABLE_ID");
 			table.setName(tableName);
-			table.setId(tableId);
 			tableList.add(table);
 		}
 		System.out.println("End~~~获取数据库:" + dbName + "表个数为:" + tableList.size());
